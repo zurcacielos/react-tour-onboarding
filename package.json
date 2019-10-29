@@ -1,5 +1,5 @@
 {
-  "name": "reactour",
+  "name": "react-tour-onboarding",
   "version": "1.15.1",
   "description": "Tourist Guide into your React Components",
   "main": "dist/reactour.cjs.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elrumordelaluz/reactour.git"
+    "url": "git+https://github.com/zurcacielos/react-tour-onboarding.git"
   },
   "keywords": [
     "react",
@@ -35,12 +35,12 @@
     "dist",
     "README.md"
   ],
-  "author": "Lionel T <elrumordelaluz@hotmail.com> (https://elrumordelaluz.com/)",
+  "author": "Fabian Sosa Escalada <fabianse@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/elrumordelaluz/reactour/issues"
+    "url": "https://github.com/zurcacielos/react-tour-onboarding/issues"
   },
-  "homepage": "https://github.com/elrumordelaluz/reactour#readme",
+  "homepage": "https://github.com/zurcacielos/react-tour-onboarding#readme",
   "devDependencies": {
     "@babel/cli": "7.6.4",
     "@babel/core": "7.6.4",
