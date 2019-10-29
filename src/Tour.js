@@ -12,7 +12,7 @@ import {
   Guide,
   Badge,
   Controls,
-  Arrow,
+  Arrow, // yay
   Navigation,
   Dot,
 } from './components/index'
