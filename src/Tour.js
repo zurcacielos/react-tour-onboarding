@@ -26,6 +26,8 @@ function checkFnAndRun(fn = null) {
       return fn(...args)
     }
   }
+
+  return function () {} // to do nothing with the second parameters
 }
 
 function Tour({
