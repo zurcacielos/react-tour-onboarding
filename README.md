@@ -315,9 +315,16 @@ Type: `bool`
 
 Default: `true`
 
+#### rewindOnClose
+> if rewindOnClose={true} it goes to first step after each close.
+> So it time the user changes the isOpen to true, we restart the tour
+
+Default: `false`
+
 #### startAt
 
 > Starting step when _Tour_ is open the first time
+> NOTE: because this is buggy, until fixed, we created rewindOnClose 
 
 Type: `number`
 

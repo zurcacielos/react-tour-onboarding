@@ -142,6 +142,9 @@ function Tour({
   function close(e) {
     checkFnAndRun(onBeforeClose)(helper.current)
     onRequestClose(e)
+    if (_ref.rewindOnClose === true) {
+      setCurrent(0)
+    }
   }
 
   function nextStep() {
