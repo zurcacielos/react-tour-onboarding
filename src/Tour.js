@@ -308,6 +308,8 @@ function Tour({
               current={current}
               totalSteps={steps.length}
               gotoStep={goTo}
+              steps={steps}
+              step={steps[current]}
               close={close}
               content={stepContent}
             >
