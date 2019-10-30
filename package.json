@@ -1,6 +1,6 @@
 {
   "name": "react-tour-onboarding",
-  "version": "1.15.58",
+  "version": "1.15.59",
   "description": "Tourist Guide into your React Components",
   "main": "dist/react-tour-onboarding.cjs.js",
   "module": "dist/react-tour-onboarding.esm.js",

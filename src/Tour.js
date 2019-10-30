@@ -50,6 +50,7 @@ function Tour({
   accentColor,
   highlightedMaskClassName,
   maskClassName,
+  rewindOnClose,
   showButtons,
   showNavigation,
   prevButton,
@@ -142,7 +143,7 @@ function Tour({
   function close(e) {
     checkFnAndRun(onBeforeClose)(helper.current)
     onRequestClose(e)
-    if (_ref.rewindOnClose === true) {
+    if (rewindOnClose === true) {
       setCurrent(0)
     }
   }
