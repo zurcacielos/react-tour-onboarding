@@ -101,6 +101,17 @@ Type: `bool`
 
 Default: `true`
 
+#### CustomHelper
+
+> replaces default floating div with this React Component.
+> See demo code for usage example. The component will be called with properties 
+> current, totalSteps, gotoStep, steps, step, close, content
+> You can use those properties to render your custom component.
+> Custom props added to steps definition, can be used here, e.g.
+> step.title, step.EmployeeNumber, step.renderThisOrThat, etc.
+
+Type: `Component`
+
 #### disableDotsNavigation
 
 > Disable interactivity with _Dots_ navigation in _Helper_
