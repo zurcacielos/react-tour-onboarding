@@ -20,6 +20,11 @@ import { getNodeRect, getWindow, inView, isBody } from './helpers'
 import { propTypes, defaultProps } from './propTypes'
 import CN from './classNames'
 
+/**
+ * if fn is a function runs it with , if not returns a void function
+ * @param fn
+ * @returns {Function|(function(...[*]): *)}
+ */
 function checkFnAndRun(fn = null) {
   if (fn && typeof fn === 'function') {
     return function(...args) {
@@ -62,6 +67,7 @@ function Tour({
   maskSpace,
 }) {
   const [current, setCurrent] = useState(0)
+  const [previous, setPrevious] = useState(0)
   const [state, dispatch] = useReducer(reducer, initialState)
   const helper = useRef(null)
   const observer = useRef(null)
@@ -156,15 +162,20 @@ function Tour({
     setCurrent(prev => (prev > 0 ? prev - 1 : prev))
   }
 
-  function goTo(step) {
+  function goToStep(step) {
     setCurrent(step)
   }
 
+  /**
+   * Shows the given step in an async fashion
+   * @param nextStep
+   * @returns {Promise<void>}
+   */
   async function showStep(nextStep) {
     const step = steps[nextStep] || steps[current]
     const { w, h } = getWindow()
 
-    if (step.actionBefore && typeof step.actionBefore === 'function') {
+    if (step.actionBefore || step.onBefore) {
       makeCalculations(
         {
           width: maskSpace * -1,
@@ -174,28 +185,30 @@ function Tour({
         },
         'center'
       )
-      await step.actionBefore()
     }
 
-    const node = step.selector ? document.querySelector(step.selector) : null
+    await checkFnAndRun(step.actionBefore)()
+    await checkFnAndRun(step.onBefore)() // API 2.0
+
+    const DOMNode = step.selector ? document.querySelector(step.selector) : null
 
     if (step.observe) {
       observer.current = document.querySelector(step.observe)
     }
 
-    if (node) {
+    if (DOMNode) {
       // DOM node exists
-      const nodeRect = getNodeRect(node)
+      const nodeRect = getNodeRect(DOMNode)
 
       // step is outside view
       if (!inView({ ...nodeRect, w, h, threshold: inViewThreshold })) {
-        const parentScroll = Scrollparent(node)
+        const parentScroll = Scrollparent(DOMNode)
         const offset = scrollOffset
           ? scrollOffset
           : nodeRect.height > h
           ? -25
           : -(h / 2) + nodeRect.height / 2
-        scrollSmooth.to(node, {
+        scrollSmooth.to(DOMNode, {
           context: isBody(parentScroll) ? window : parentScroll,
           duration: scrollDuration,
           offset,
@@ -216,9 +229,7 @@ function Tour({
       })
     }
 
-    if (step.action && typeof step.action === 'function') {
-      await step.action(node)
-    }
+    await checkFnAndRun(step.action)(DOMNode)
   }
 
   function makeCalculations(nodeRect, helperPosition) {
@@ -252,7 +263,7 @@ function Tour({
     (typeof steps[current].content === 'function'
       ? steps[current].content({
           close: close,
-          goTo,
+          goTo: goToStep,
           inDOM: state.inDOM,
           step: current + 1,
         })
@@ -311,7 +322,7 @@ function Tour({
             <CustomHelper
               current={current}
               totalSteps={steps.length}
-              gotoStep={goTo}
+              gotoStep={goToStep}
               steps={steps}
               step={steps[current]}
               close={close}
@@ -346,7 +357,7 @@ function Tour({
                       {steps.map((s, i) => (
                         <Dot
                           key={`${s.selector ? s.selector : 'undef'}_${i}`}
-                          onClick={() => goTo(i)}
+                          onClick={() => goToStep(i)}
                           current={current}
                           index={i}
                           disabled={current === i || disableDotsNavigation}
