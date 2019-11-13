@@ -38,13 +38,13 @@ function Arrow({ className, onClick, inverted, label, disabled }) {
   )
 }
 
-Arrow.propTypes = {
-  className: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  inverted: PropTypes.bool,
-  label: PropTypes.node,
-  disabled: PropTypes.bool,
-}
+// Arrow.propTypes = {
+//   className: PropTypes.string.isRequired,
+//   onClick: PropTypes.func.isRequired,
+//   inverted: PropTypes.bool,
+//   label: PropTypes.node,
+//   disabled: PropTypes.bool,
+// }
 
 export default styled(Arrow)`
   color: ${props => (props.disabled ? '#caccce' : '#646464')};

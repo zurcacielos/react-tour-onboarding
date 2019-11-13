@@ -336,18 +336,20 @@ function Tour({
             </CustomHelper>
           ) : (
             <DefaultCallout
-              current
-              stepContent
-              children
-              steps
-              showNumber
-              showButtons
-              showNavigation
-              prevButton
-              showNavigationNumber
-              disableDotsNavigation
-              lastStepNextButton
-              nextButton
+              current={current}
+              prevStep={() => prevStep()}
+              nextStep={() => nextStep()}
+              stepContent={stepContent}
+              children={children}
+              steps={steps}
+              showNumber={showNumber}
+              showButtons={showButtons}
+              showNavigation={showNavigation}
+              prevButton={prevButton}
+              showNavigationNumber={showNavigationNumber}
+              disableDotsNavigation={disableDotsNavigation}
+              lastStepNextButton={lastStepNextButton}
+              nextButton={nextButton}
             />
           )}
         </Guide>
@@ -390,7 +392,7 @@ function reducer(state, action) {
   }
 }
 
-Tour.propTypes = propTypes
+// Tour.propTypes = propTypes
 
 Tour.defaultProps = defaultProps
 

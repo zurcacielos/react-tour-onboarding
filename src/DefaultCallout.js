@@ -36,6 +36,9 @@ function checkFnAndRun(fn = null) {
 }
 
 function DefaultCallout({
+  current,
+  prevStep,
+  nextStep,
   stepContent,
   children,
   steps,
@@ -48,6 +51,17 @@ function DefaultCallout({
   lastStepNextButton,
   nextButton,
 }) {
+
+  console.log('DefaultCallout.nextStep', nextStep)
+
+  function nextArrowClick() {
+    if (lastStepNextButton && close) {
+      // TODO verify v1 doingnothing
+    } else if (typeof nextStep === 'function') {
+      nextStep()
+    }
+  }
+
   return (
     <>
       {children}
@@ -64,7 +78,7 @@ function DefaultCallout({
         <Controls data-tour-elem="controls">
           {showButtons && (
             <Arrow
-              onClick={prevStep}
+              onClick={()=>prevStep}
               disabled={current === 0}
               label={prevButton ? prevButton : null}
             />
@@ -72,34 +86,27 @@ function DefaultCallout({
 
           {showNavigation && (
             <Navigation data-tour-elem="navigation">
-              {steps.map((s, i) => (
-                <Dot
-                  key={`${s.selector ? s.selector : 'undef'}_${i}`}
-                  onClick={() => goToStep(i)}
-                  current={current}
-                  index={i}
-                  disabled={current === i || disableDotsNavigation}
-                  showNumber={showNavigationNumber}
-                  data-tour-elem="dot"
-                  className={cn(CN.dot.base, {
-                    [CN.dot.active]: current === i,
-                  })}
-                />
-              ))}
+              {steps.maps &&
+                steps.map((s, i) => (
+                  <Dot
+                    key={`${s.selector ? s.selector : 'undef'}_${i}`}
+                    onClick={() => goToStep(i)}
+                    current={current}
+                    index={i}
+                    disabled={current === i || disableDotsNavigation}
+                    showNumber={showNavigationNumber}
+                    data-tour-elem="dot"
+                    className={cn(CN.dot.base, {
+                      [CN.dot.active]: current === i,
+                    })}
+                  />
+                ))}
             </Navigation>
           )}
 
           {showButtons && (
             <Arrow
-              onClick={
-                current === steps.length - 1
-                  ? lastStepNextButton
-                    ? close
-                    : () => {}
-                  : typeof nextStep === 'function'
-                  ? nextStep
-                  : this.nextStep
-              }
+              onClick={nextArrowClick}
               disabled={!lastStepNextButton && current === steps.length - 1}
               inverted
               label={
