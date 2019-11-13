@@ -50,6 +50,7 @@ function App() {
       />
       <Suspense fallback={<React.Fragment />}>
         <Tour
+          startAt={2}
           rewindOnClose={true}
           onAfterOpen={disableBody}
           onBeforeClose={enableBody}

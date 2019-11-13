@@ -70,7 +70,7 @@ function Tour({
   rounded,
   maskSpace,
 }) {
-  const [current, setCurrent] = useState(0)
+  const [current, setCurrent] = useState(startAt ? startAt : 0)
   const [previous, setPrevious] = useState(0)
   const [state, dispatch] = useReducer(reducer, initialState)
   const helper = useRef(null)
@@ -103,7 +103,7 @@ function Tour({
     window.addEventListener('resize', debouncedShowStep, false)
 
     if (isOpen) {
-      showStep(startAt) // TODO - do this will always start at that one? not allowing next
+      showStep()
       if (helper.current) {
         helper.current.focus()
         checkFnAndRun(onAfterOpen)(helper.current)
@@ -337,8 +337,8 @@ function Tour({
           ) : (
             <DefaultCallout
               current={current}
-              prevStep={() => prevStep()}
-              nextStep={() => nextStep()}
+              prevStep={prevStep}
+              nextStep={nextStep}
               stepContent={stepContent}
               children={children}
               steps={steps}

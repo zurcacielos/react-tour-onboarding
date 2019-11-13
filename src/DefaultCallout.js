@@ -78,7 +78,7 @@ function DefaultCallout({
         <Controls data-tour-elem="controls">
           {showButtons && (
             <Arrow
-              onClick={()=>prevStep}
+              onClick={prevStep}
               disabled={current === 0}
               label={prevButton ? prevButton : null}
             />
