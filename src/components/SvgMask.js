@@ -157,6 +157,13 @@ export default function SvgMask({
           display={disableInteraction ? 'block' : 'none'}
           className={disableInteractionClassName}
         />
+        {/*This could be a way to draw a callout triangle, but we need the coordinates of the floating div/helper, so it's better to implement it there*/}
+        {/*<g transform={`translate(${left+targetWidth/2} ${top + height}) rotate(180,5,5)`} className={'calloutTriangle'}>*/}
+        {/*  <polygon*/}
+        {/*    points="0,0 10,0 5,10"*/}
+        {/*    style={{ fill: 'white', stroke: 'white', strokeWidth: '1' }}*/}
+        {/*  ></polygon>*/}
+        {/*</g>*/}
       </svg>
     </SvgMaskWrapper>
   )

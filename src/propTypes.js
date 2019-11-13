@@ -15,6 +15,8 @@ export const propTypes = {
   onAfterOpen: PropTypes.func,
   onBeforeClose: PropTypes.func,
   onRequestClose: PropTypes.func,
+  onBeforeStep: PropTypes.func, // API 2.0
+  onAfterStep: PropTypes.func, // API 2.0
   prevButton: PropTypes.node,
   scrollDuration: PropTypes.number,
   scrollOffset: PropTypes.number,

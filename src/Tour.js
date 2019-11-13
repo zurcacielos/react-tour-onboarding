@@ -19,6 +19,7 @@ import {
 import { getNodeRect, getWindow, inView, isBody } from './helpers'
 import { propTypes, defaultProps } from './propTypes'
 import CN from './classNames'
+import DefaultCallout from './DefaultCallout'
 
 /**
  * if fn is a function runs it with , if not returns a void function
@@ -32,7 +33,7 @@ function checkFnAndRun(fn = null) {
     }
   }
 
-  return function () {} // to do nothing with the second parameters
+  return function() {} // to do nothing with the second parameters
 }
 
 function Tour({
@@ -50,6 +51,9 @@ function Tour({
   onRequestClose,
   onAfterOpen,
   onBeforeClose,
+  onBeforeStep, // API 2.0
+  onAfterStep, // TODO after each setCurrent will rerender API 2.0
+  stepAdditionalParams, // API 2.0 - to send additional params to step events
   CustomHelper,
   showNumber,
   accentColor,
@@ -99,7 +103,7 @@ function Tour({
     window.addEventListener('resize', debouncedShowStep, false)
 
     if (isOpen) {
-      showStep(startAt)
+      showStep(startAt) // TODO - do this will always start at that one? not allowing next
       if (helper.current) {
         helper.current.focus()
         checkFnAndRun(onAfterOpen)(helper.current)
@@ -149,7 +153,7 @@ function Tour({
   function close(e) {
     checkFnAndRun(onBeforeClose)(helper.current)
     onRequestClose(e)
-    if (rewindOnClose === true) {
+    if (helper && rewindOnClose === true) {
       setCurrent(0)
     }
   }
@@ -187,8 +191,8 @@ function Tour({
       )
     }
 
-    await checkFnAndRun(step.actionBefore)()
-    await checkFnAndRun(step.onBefore)() // API 2.0
+    await checkFnAndRun(step.actionBefore)(step, stepAdditionalParams)
+    await checkFnAndRun(onBeforeStep)(step, stepAdditionalParams) // API 2.0
 
     const DOMNode = step.selector ? document.querySelector(step.selector) : null
 
@@ -331,73 +335,20 @@ function Tour({
               {children}
             </CustomHelper>
           ) : (
-            <>
-              {children}
-              {stepContent}
-              {showNumber && (
-                <Badge data-tour-elem="badge">
-                  {typeof badgeContent === 'function'
-                    ? badgeContent(current + 1, steps.length)
-                    : current + 1}
-                </Badge>
-              )}
-
-              {(showButtons || showNavigation) && (
-                <Controls data-tour-elem="controls">
-                  {showButtons && (
-                    <Arrow
-                      onClick={prevStep}
-                      disabled={current === 0}
-                      label={prevButton ? prevButton : null}
-                    />
-                  )}
-
-                  {showNavigation && (
-                    <Navigation data-tour-elem="navigation">
-                      {steps.map((s, i) => (
-                        <Dot
-                          key={`${s.selector ? s.selector : 'undef'}_${i}`}
-                          onClick={() => goToStep(i)}
-                          current={current}
-                          index={i}
-                          disabled={current === i || disableDotsNavigation}
-                          showNumber={showNavigationNumber}
-                          data-tour-elem="dot"
-                          className={cn(CN.dot.base, {
-                            [CN.dot.active]: current === i,
-                          })}
-                        />
-                      ))}
-                    </Navigation>
-                  )}
-
-                  {showButtons && (
-                    <Arrow
-                      onClick={
-                        current === steps.length - 1
-                          ? lastStepNextButton
-                            ? close
-                            : () => {}
-                          : typeof nextStep === 'function'
-                          ? nextStep
-                          : this.nextStep
-                      }
-                      disabled={
-                        !lastStepNextButton && current === steps.length - 1
-                      }
-                      inverted
-                      label={
-                        lastStepNextButton && current === steps.length - 1
-                          ? lastStepNextButton
-                          : nextButton
-                          ? nextButton
-                          : null
-                      }
-                    />
-                  )}
-                </Controls>
-              )}
-            </>
+            <DefaultCallout
+              current
+              stepContent
+              children
+              steps
+              showNumber
+              showButtons
+              showNavigation
+              prevButton
+              showNavigationNumber
+              disableDotsNavigation
+              lastStepNextButton
+              nextButton
+            />
           )}
         </Guide>
       </FocusLock>
