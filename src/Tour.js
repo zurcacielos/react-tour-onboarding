@@ -36,6 +36,16 @@ function checkFnAndRun(fn = null) {
   return function() {} // to do nothing with the second parameters
 }
 
+export function isNullOrUndefined(x) {
+  if (typeof x == 'undefined') {
+    return true
+  }
+  if (x === null) {
+    return true
+  }
+  return false
+}
+
 function Tour({
   children,
   isOpen,
@@ -97,6 +107,17 @@ function Tour({
     }
   })
 
+  /**
+   * The user can change at any moment the startAt and we update the current step.
+   * This is helpful if the user wants a single tour component with steps that spread several pages/views
+   * but still open the tour in the correct step if Tour is open in any given page.
+   */
+  useEffect(() => {
+    if (!isNullOrUndefined(startAt)) {
+      setCurrent(startAt)
+    }
+  }, [startAt])
+
   useEffect(() => {
     const debouncedShowStep = debounce(showStep, 100)
     window.addEventListener('keydown', keyHandler, false)
@@ -154,7 +175,7 @@ function Tour({
     checkFnAndRun(onBeforeClose)(helper.current)
     onRequestClose(e)
     if (helper && rewindOnClose === true) {
-      setCurrent(0)
+      setCurrent(!isNullOrUndefined(startAt) ? startAt : 0)
     }
   }
 
